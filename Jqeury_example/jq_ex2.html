@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>左右切圖JQuery</title>
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<style>
+	.topLabel{
+		display: flex;
+        justify-content: center;
+        align-items: center;
+	}
+	
+	.container{
+		display: flex;
+        justify-content: center;
+        align-items: center;
+		text-align:center;
+	}
+	.box{
+		width:250px;
+		height:600px;
+	}
+	.leftPicBox, .righttPicBox{
+		border: 1px solid #ccc;
+		height:580px;
+		width:250px;
+		overflow-y:scroll;
+	}
+	.buttonBox{
+		width:50px;
+	}
+	.bt{
+		width:30px;
+		height:30px;
+		margin:5px;
+		margin-left:9px;
+	}
+	img{
+		width:95%;
+		
+	}
+	.active{
+		width:85%;
+		height:130px;
+		border: 3px solid gray;
+	}
+	
+	
+</style>
+</head>
+<body onload="initialPicture()">
+<div class="topLabel">
+	<label>圖片插入位置：</label>
+	<label>
+        <input type="radio" name="choice" value="append">append
+    </label>
+    <label>
+        <input type="radio" name="choice" value="prepend">prepend
+    </label>
+</div>
+<div class="container">
+	<div class="box">
+		<div>
+			<label>可選項</label>
+		</div>
+		<div class="leftPicBox" id="leftPic">
+			
+		</div>
+	</div>
+	<div class="buttonBox">
+		<button type="button" class="bt toRight">&gt;</button>
+		<button type="button" class="bt toLeft">&lt;</button>
+		<button type="button" class="bt allRight">&gt;&gt;</button>
+		<button type="button" class="bt allLeft">&lt;&lt;</button>
+	</div>
+	<div class="box">
+		<div>
+			<label>已選項</label>
+		</div>
+		<div class="righttPicBox" id="rightPic">
+			
+		</div>
+	</div>
+</div>
+
+</body>
+<script>
+	
+    const initialData = [
+        { src: "./image1.jpg", id: "image1"},
+        { src: "./image2.jpg", id: "image2"},
+        { src: "./image3.jpg", id: "image3"},
+		{ src: "./image4.jpg", id: "image4"},
+		{ src: "./image5.jpg", id: "image5"},
+		{ src: "./image6.jpg", id: "image6"},
+		];
+		//網頁onload後 初始圖片
+	function initialPicture(){
+		initialData.forEach(image => {
+        const imgElement = $("<img class=itemClass>");
+        imgElement.attr('src', image.src);
+        imgElement.attr('alt', image.id);
+		$('#leftPic').append(imgElement);
+    });
+	}
+	//當圖片背點擊後加上active這個class 
+	$(document).ready(function () {
+		$('.itemClass').on('click', function() {
+			$(this).toggleClass('active');
+		});
+	});
+	
+	
+	//到左
+	$(".toLeft").click(function(){
+		const selection = $('input[name="choice"]:checked').val();
+        if (selection == "append") {
+            const movedImage = $('#rightPic .active').detach();  //選取有active的class的標籤
+			$('#leftPic').append(movedImage);					//	append過去
+			movedImage.removeClass('active');					//移除active標籤
+		}
+		else if(selection == "prepend") {
+			const movedImage = $('#rightPic .active').detach();
+			$('#leftPic').prepend(movedImage);
+			movedImage.removeClass('active');
+        }
+		else{
+			alert("請選擇");
+		}
+	});
+	
+	//到右
+	$(".toRight").click(function(){
+		const selection = $('input[name="choice"]:checked').val();
+        if (selection == "append") {
+            const movedImage = $('#leftPic .active').detach();
+			$('#rightPic').append(movedImage);
+			movedImage.removeClass('active');
+		}
+		else if(selection == "prepend") {
+			const movedImage = $('#leftPic .active').detach();
+			$('#rightPic').prepend(movedImage);
+			movedImage.removeClass('active');
+        }
+		else{
+			alert("請選擇");
+		}
+	});
+	
+	//全到左
+	$(".allLeft").click(function(){
+		const selection = $('input[name="choice"]:checked').val();
+        if (selection == "append") {
+            const movedImage = $('#rightPic .itemClass').detach();
+			$('#leftPic').append(movedImage);
+			movedImage.removeClass('active');
+		}
+		else if(selection == "prepend") {
+			const movedImage = $('#rightPic .itemClass').detach();
+			$('#leftPic').prepend(movedImage);
+			movedImage.removeClass('active');
+        }
+		else{
+			alert("請選擇");
+		}
+	});
+	
+	//全到右
+	$(".allRight").click(function(){
+		const selection = $('input[name="choice"]:checked').val();
+        if (selection == "append") {
+            const movedImage = $('#leftPic .itemClass').detach();
+			$('#rightPic').append(movedImage);
+			movedImage.removeClass('active');
+		}
+		else if(selection == "prepend") {
+			const movedImage = $('#leftPic .itemClass').detach();
+			$('#rightPic').prepend(movedImage);
+			movedImage.removeClass('active');
+        }
+		else{
+			alert("請選擇");
+		}
+	});
+	
+</script>
+</html>

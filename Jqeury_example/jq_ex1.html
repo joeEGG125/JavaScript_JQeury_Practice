@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8 zh-tw">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQuery選擇器程序</title>
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	<link rel="stylesheet" href="./main.css" />
+    <style>
+        input {
+            width: 300px;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px;
+            border: none; 
+            border-radius: 5px;
+			cursor: pointer;
+        }
+		.error {
+            color: red;
+        }
+		.box{
+			width: 49%;
+			height: 550px;
+			border: 2px solid black;
+			overflow-y: scroll;
+			margin: 10px;
+		}
+		.container{
+			display: flex;
+		}
+		table, td, th{
+			border: 2px solid grey;
+        }
+		.found-element {
+            background-color: #fffc3a;
+        }
+		.statement, .found-count{
+			color: blue;
+		}
+		.found-list{
+			color: red;
+			font-size: 20px;
+		}
+    </style>
+</head>
+<body onload="page()">
+<form>
+<div>
+	<label>選擇器 :</label>
+    <input type="text" id="input" name="input">
+	<button type="button" class="enterbtn">確定</button>
+	<p class="statement" id="statement"></p>
+	<p class="found-count"></p>
+	<p class="found-list"></p>
+</div>
+<div class="container">
+	<div class="box">
+		<div id="codepresent">
+		</div>
+	</div>
+	<div class="box">
+		<p>程式Code</p>
+		<p class="doctxt"></p>
+		<iframe src="./read.txt" width="100%"height="88%"></iframe>
+	</div>
+</div>
+
+
+</form>
+</body>
+<script>
+	function page(){
+		$.get("./read.txt", function(data) {
+			$('#codepresent').html(data);
+		});
+	}
+	
+	$('.enterbtn').click(function () {
+		var selector = $('input').val();
+		if(selector == ""){
+			alert("請輸入-->選擇器欄位");
+		}
+		else{
+			//移除舊有有添加found-element的class
+			$('.found-element','#codepresent').removeClass('found-element');
+			//清空List-補
+			$('.found-list').empty();
+			//加上背景色的class
+			$(selector,'#codepresent').addClass('found-element');   
+			$('.statement').html('"JQuery語句: $("' + selector + '")addClass("found-element");'); //列印出addClass
+			//計算出目前有匹配的標籤共有幾個
+			$('.found-count').html('匹配結果: ' + $(selector,'#codepresent').length);
+			//用for each列出所有標籤
+			$(selector,'#codepresent').each(function() {
+				$('.found-list').append(this.tagName.toLowerCase() + "<br>");
+			});
+		}
+	});
+
+
+	
+</script>
+</html>
